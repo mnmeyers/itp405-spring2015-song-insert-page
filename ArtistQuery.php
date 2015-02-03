@@ -6,15 +6,16 @@ class ArtistQuery extends Database{
 	public function getAll()
 	{
 		$sql = "
-		SELECT artist_name
+		SELECT id, artist_name
 		FROM artists
 		ORDER BY artist_name ASC
 		";
 
-		$statement = $pdo->prepare($sql);
+		$statement = static::$pdo->prepare($sql);
 		$statement->execute();
 		$artists = $statement->fetchAll(PDO::FETCH_OBJ);
 		return $this->artists;
+		//return $artists;
 
 	}
 

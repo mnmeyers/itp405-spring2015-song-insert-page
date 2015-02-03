@@ -6,12 +6,12 @@ class GenreQuery extends Database {
     public function getAll()
     {
         $sql = "
-        SELECT genre
+        SELECT *
         FROM genres
         ORDER BY genre ASC
         ";
 
-        $statement = $pdo->prepare($sql);
+        $statement = static::$pdo->prepare($sql);
         $statement->execute();
         $_genres = $statement->fetchAll(PDO::FETCH_OBJ);
         return $this->genres;

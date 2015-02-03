@@ -143,9 +143,17 @@ vertical-align: middle;
     </label>
   <select class="form-control" name="artists">
   <option>Select One</option>
-  	<?php foreach ($selectArtists as $selectArtist) : ?>
-  		<option><?php echo $selectArtist->artist_name ?></option>
-  	<?php endforeach ?>
+  <option>Select two</option>
+  <?php
+     foreach($selectArtists as $artist):
+$artist_id = $artist->id;
+$artist_name = $artist->artist_name;
+                    ?>
+                    <option value="<?php echo $artist_id?>"><?php echo $artist_name?></option>
+                    <?php
+                        endforeach;
+                   
+  ?>
 </select>
   </div><br>
 
@@ -155,7 +163,13 @@ vertical-align: middle;
     </label>
   <select class="form-control" name="genres">
   <option>Select One</option>
-  	
+  	<?php
+  	$genreQuery = new GenreQuery();
+  	$selectGenres = $genreQuery->getAll();
+  	foreach ($selectGenres as $genre) :
+  	?>
+ <?php echo "<option value='$genre->id'>" . $genre->genre; ?></option>
+  <?php endforeach ?>
 </select>
   </div><br>
 
