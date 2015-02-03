@@ -2,7 +2,6 @@
 error_reporting(-1);
 require_once __DIR__ . '/Database.php';
 class ArtistQuery extends Database{
-	public $artists;
 	public function getAll()
 	{
 		$sql = "
@@ -13,12 +12,10 @@ class ArtistQuery extends Database{
 
 		$statement = static::$pdo->prepare($sql);
 		$statement->execute();
-		$artists = $statement->fetchAll(PDO::FETCH_OBJ);
-		return $this->artists;
-		//return $artists;
+		return $statement->fetchAll(PDO::FETCH_OBJ);
 
 	}
 
 }
-	
+
 	

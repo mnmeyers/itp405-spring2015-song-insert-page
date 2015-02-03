@@ -30,7 +30,19 @@ class Song extends Database{
 	//performs the insert
 	public function save()
 	{
-		
+		$sql = "
+			INSERT INTO songs (title, artist_id, genre_id, price, added, created_at, updated_at)
+			VALUES (?, ?, ?, ?, NOW(), NOW(), NOW())
+
+		";
+		$statement = static::$pdo->prepare($sql);
+		$statement->bindParam(1, $this->title);
+		$statement->bindParam(2, $this->artist_id);
+		$statement->bindParam(3, $this->genre_id);
+		$statement->bindParam(4, $this->price);
+		$statement->execute();
+		$this->id = static::$pdo->lastInsertId();
+
 	}
 	//returns the song title
 	public function getTitle()

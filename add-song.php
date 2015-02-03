@@ -1,11 +1,21 @@
 <?php
+error_reporting(-1);
 require_once __DIR__ . '/Song.php';
 require_once __DIR__ . '/GenreQuery.php';
 require_once __DIR__ . '/ArtistQuery.php';
 
 $artistQuery = new ArtistQuery();
 $selectArtists = $artistQuery->getAll();
-
+$genreQuery = new GenreQuery();
+$selectGenres = $genreQuery->getAll();
+if (isset($_POST['submit'])){
+	$song = new Song();
+	$song->setTitle($_POST['title']); 
+	$song->setArtistId($_POST['artist']); 
+	$song->setGenreId($_POST['genre']); 
+	$song->setPrice($_POST['price']);
+	$song->save();
+} 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -18,10 +28,10 @@ $selectArtists = $artistQuery->getAll();
 
     <!-- Bootstrap -->
     <link href="bootstrap-3.3.2-dist/css/bootstrap.css" rel="stylesheet">
-    <style>
+<style>
     
 
-    .container {
+.container {
     width:90%;
     margin: auto;
     height:auto;
@@ -108,89 +118,95 @@ button {
 }
 
 @media (min-width: 768px){
-.navbar-form .form-control {
-display: inline-block;
-width: 100%;
-vertical-align: middle;
+	.navbar-form .form-control {
+	display: inline-block;
+	width: 100%;
+	vertical-align: middle;
+	}
 }
-}
- 	</style>
+</style>
   </head>
   <body>
- 
+	<div class="navbar navbar-inverse navbar-static-top" role="navigation">
+	    <div class="navbar-header"> 
+	        <a class="navbar-brand" rel="home" href="add-song.php" title="ITP 405">
+	        	Song Insert
+	        </a>
+	    </div>
+	</div>
+	
+	<div class="container">
+		<form class="navbar-form navbar-left" role="search" method="post" action="add-song.php">
+<?php if (isset($_POST['submit'])) { ?>
+		The song <?php echo $song->getTitle() ?>
+   with an ID of <?php echo $song->getId() ?>
+   was inserted successfully!
+   <?php } 
+   ?>
+  			<div class="form-group">
+			    <label>
+			    	Song Title: 
+			    </label>
+  				<input type="text" class="form-control" placeholder="Song Title" name="title" required>
+  			</div><br>
 
-<div class="navbar navbar-inverse navbar-static-top" role="navigation">
+  			<div class="form-group">
+			    <label>
+			    	Artist: 
+			    </label>
+				<select class="form-control" name="artist">
+					<option></option>
+	  				<?php
+	     				foreach($selectArtists as $artist):
+							$artist_id = $artist->id;
+							$artist_name = $artist->artist_name;
+	                ?>
+	                <option value="<?php echo $artist_id?>"><?php echo $artist_name?></option>
+	                <?php
+	                    endforeach;   
+	  				?>
+				</select>
+ 			</div><br>
 
-    <div class="navbar-header">
-       
-        <a class="navbar-brand" rel="home" href="add-song.php" title="ITP 405">Song Insert</a>
-    </div>
-
-   
-</div>
-<form class="navbar-form navbar-left" role="search" method="get" action="add-song.php">
-<div class="container">
-  <div class="form-group">
-    <label>
-    	Song Title: 
-    </label>
-  <input type="text" class="form-control" placeholder="Song Title" name="song">
-  </div><br>
-
-  <div class="form-group">
-    <label>
-    	Artist: 
-    </label>
-  <select class="form-control" name="artists">
-  <option>Select One</option>
-  <option>Select two</option>
-  <?php
-     foreach($selectArtists as $artist):
-$artist_id = $artist->id;
-$artist_name = $artist->artist_name;
+  			<div class="form-group">
+    			<label>
+    				Genre: 
+    			</label>
+  				<select class="form-control" name="genre">
+  					<option></option>
+  					<?php
+     					foreach($selectGenres as $genre):
+						$genre_id = $genre->id;
+						$genre_name = $genre->genre;
                     ?>
-                    <option value="<?php echo $artist_id?>"><?php echo $artist_name?></option>
+                    <option value="<?php echo $genre_id?>"><?php echo $genre_name?></option>
                     <?php
                         endforeach;
-                   
-  ?>
-</select>
-  </div><br>
+  					?>
+				</select>
+  			</div><br>
 
-  <div class="form-group">
-    <label>
-    	Genre: 
-    </label>
-  <select class="form-control" name="genres">
-  <option>Select One</option>
-  	<?php
-  	$genreQuery = new GenreQuery();
-  	$selectGenres = $genreQuery->getAll();
-  	foreach ($selectGenres as $genre) :
-  	?>
- <?php echo "<option value='$genre->id'>" . $genre->genre; ?></option>
-  <?php endforeach ?>
-</select>
-  </div><br>
+			<div class="form-group">
+			    <label>
+			    	Price: 
+			    </label>
+  				<input type="text" class="form-control" placeholder="Price" name="price" required>
+  			</div><br>
 
-<div class="form-group">
-    <label>
-    	Price: 
-    </label>
-  <input type="text" class="form-control" placeholder="Price" name="price">
-  </div><br>
+			<div class="form-group">
+				<label>
+				</label>
+  			<button type="submit" name="submit" class="btn btn-default">Add Song</button>
+  			</div>
+		</form>
 
-<div class="form-group">
-<label></label>
-  <button type="submit" name="submit" class="btn btn-default">Search</button>
-  </div>
-</form>
+	</div>
 
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
-</div>
+   
+
   </body>
 </html>
